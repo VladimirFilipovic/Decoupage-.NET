@@ -1,0 +1,18 @@
+﻿@model IEnumerable<KC_Decoupage.Models.Post>
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Welcome to @Model.First().Creator's page</h1>
+
+<ul>
+    @foreach (var post in Model)
+    {
+        <li>
+            @post.Title
+        </li>   
+    }
+</ul>
+

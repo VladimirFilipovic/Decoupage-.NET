@@ -1,0 +1,78 @@
+﻿@using Microsoft.AspNet.Identity
+@model  IEnumerable<KC_Decoupage.Models.ApplicationUser>
+@{
+    ViewBag.Title = "UserManager";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 style="text-align: center;color: white">User Control Panel</h1>
+
+@if (!Model.Any())
+{
+    
+    <p>You don't have any users yet.</p>
+}
+else
+{
+    <table id="users" class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>User</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>
+                    @* <button data-customer-id="@user.Id" class="btn-link js-delete">Delete</button> *@
+                    <button data-user-id="@user.Id" class="btn  btn-primary js-delete " style="width: 10rem">Delete user</button>
+                   @* @Html.ActionLink("AddUsers", "Register", "Account")*@
+                    @Html.ActionLink("Update user", "Update", "UserAccount", new { id = user.Id }, new { @class = "btn  btn-info",@style="width:10rem" })
+
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+@Html.ActionLink("Add user", "CreateUser", "UserAccount", null, new { @class = " btn  btn-primary btn-success ", style = "width: 10rem" })
+
+
+
+
+
+
+@section scripts
+{
+    <script>
+
+        $(document).ready(function() {
+            var table = $("#users").DataTable();
+            $("#users").on("click",
+                ".js-delete",
+                function() {
+                    var button = $(this);
+                    bootbox.confirm("Are you sure you want to delete this user",
+                        function(result) {
+                            if (result) {
+                                $.ajax({
+                                    url: "/UserAccount/Delete/" + button.attr("data-user-id"),
+                                    method: "DELETE",
+                                    success: function() {
+                                        table.row(button.parents("tr")).remove().draw();
+
+                                    }
+                                });
+                            }
+                        });
+                });
+        
+
+    });
+            
+    </script>
+        
+}

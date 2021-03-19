@@ -1,0 +1,114 @@
+﻿
+@model KC_Decoupage.Models.Post
+@using System.Activities.Statements
+@using System.Web.UI.HtmlControls
+@using KC_Decoupage.Models
+@using Microsoft.AspNet.Identity
+
+
+
+<body>
+@{
+    string imagePath;
+}
+@if (Model == null )
+{
+    <h1>Create Post</h1>
+}
+else if (String.IsNullOrEmpty(Model.ImagePath))
+{
+    <h1>Create Post</h1>
+}
+else
+{
+    <h1>Edit Post</h1>
+
+}
+    
+
+
+
+@using (Html.BeginForm("Save", "Posts", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    {
+
+        <div class="form-group">
+            @Html.LabelFor(p => p.Title, new {@class = "whitetext"})
+            @Html.TextBoxFor(m => m.Title, new {@class = "form-control "})
+            @Html.ValidationMessageFor(m => m.Title, "", new {@class = "text-danger"})
+
+        </div>
+
+
+        <div style="color: white" class="form-group">
+            @Html.LabelFor(x => x.File)
+            <input type="file" name="@Html.NameFor(x => x.File)" id="@Html.IdFor(x => x.File)" />
+            @Html.ValidationMessageFor(x => x.File, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(x => x.ImagePath, "", new { @class = "text-danger" })
+
+
+        </div>
+        
+        if (Model!=null && Model.ImagePath!= null)
+        {
+            <img src="@Url.Content(@Model.ImagePath)" id="preview" style="width: 100px" />
+
+        }
+        else
+        {
+            <img src="" id="preview" style="width: 100px" />
+
+        }
+
+        <br />
+
+        <div style="color: white" class="form-group">
+            @Html.LabelFor(p => p.Content)
+            @Html.TextBoxFor(m => m.Content, new {@class = "form-control"})
+            @Html.ValidationMessageFor(m => m.Content, "", new {@class = "text-danger"})
+
+        </div>
+
+        <div id="imageholder"></div>
+
+
+        @Html.HiddenFor(p => p.Id)
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-primary">Save</button>
+    }
+}
+   
+
+
+
+</body>
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+    
+
+
+    <script>
+    $(document).ready(function () {
+        function readUrl(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#preview').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        $("#@Html.IdFor(x => x.File)").change(function () {
+            readUrl(this);
+        });
+    });
+
+
+
+
+    </script>
+}
