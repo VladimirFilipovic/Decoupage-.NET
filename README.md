@@ -1,2 +1,2 @@
 # Decoupage-.NET
-RVA is a school administration software which enables  management of relevant student information.  
+Decoupage is a content management system website designed specifically for artists to showcase their art. 
